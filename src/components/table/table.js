@@ -1,16 +1,10 @@
 import Headtable from "../headtable/headtable.js"
 import '../../styles/table.css';
-
-function Table() {
-  return (
-    <>
-    <table>
-    <Headtable/>
-    <tr>
-        <td colspan="23"></td>
-    </tr>
-
-    <tr>
+import React, { useState } from 'react';
+function NewTable ({bd}) {
+    return (
+        <>
+        <tr>
         <td rowspan="2">Статус</td>
         <td rowspan="2">Транзакция</td>
         <td rowspan="2">План на ППП, час</td>
@@ -71,10 +65,10 @@ function Table() {
 
     </tr>
     <tr>
-        <td rowspan="7">В работе</td>
-        <td rowspan="7">25_002</td>
-        <td rowspan="7">64:00:00</td>
-        <td>8:00</td>
+        <td rowspan="7">{bd.status}</td>
+        <td rowspan="7">{bd.transaction}</td>
+        <td rowspan="7">{bd.plan}:00:00</td>
+        <td>{bd.operation1}:00</td>
         <td></td>
         <td>4:00</td>
         <td>100%</td>
@@ -95,7 +89,7 @@ function Table() {
 
     </tr>
     <tr>
-        <td>8:00</td>
+        <td>{bd.operation2}:00</td>
         <td></td>
         <td>6:00</td>
         <td>100%</td>
@@ -115,7 +109,7 @@ function Table() {
         <td>01.02.2025 15.30</td>
     </tr>
     <tr>
-    <td>16:00</td>
+    <td>{bd.operation3}:00</td>
         <td>16:00</td>
         <td>27:00:00</td>
         <td>139%</td>
@@ -136,7 +130,7 @@ function Table() {
 
     </tr>
     <tr>
-    <td>8:00</td>
+    <td>{bd.operation4}:00</td>
         <td>8:00</td>
         <td>18:00:00</td>
         <td>94%</td>
@@ -157,7 +151,7 @@ function Table() {
 
     </tr>
     <tr>
-    <td>2:00</td>
+    <td>{bd.operation5}:00</td>
         <td></td>
         <td>2:00</td>
         <td>100%</td>
@@ -178,7 +172,7 @@ function Table() {
 
     </tr>
     <tr>
-    <td>8:00</td>
+    <td>{bd.operation6}:00</td>
         <td></td>
         <td>4:00</td>
         <td>100%</td>
@@ -199,7 +193,7 @@ function Table() {
 
     </tr>
     <tr>
-    <td>8:00</td>
+    <td>{bd.operation7}:00</td>
         <td></td>
         <td>8:00</td>
         <td>100%</td>
@@ -244,7 +238,150 @@ function Table() {
         <td></td>
         <td></td>
     </tr>
+</>
+    );
+}
 
+
+
+function Table() {
+
+  const [tables, setTables] = useState([]);
+  const [col1Input, setCol1Input] = useState('');
+  const [col2Input, setCol2Input] = useState('');
+  const [col3Input, setCol3Input] = useState('');
+  const [col4Input, setCol4Input] = useState('');
+  const [col5Input, setCol5Input] = useState('');
+  const [col6Input, setCol6Input] = useState('');
+  const [col7Input, setCol7Input] = useState('');
+  const [col8Input, setCol8Input] = useState('');
+  const [col9Input, setCol9Input] = useState('');
+  const [col10Input, setCol10Input] = useState('');
+  
+
+  const handleAddTable = () => {
+    const newTableData = {
+      status: col1Input,
+      transaction: col2Input,
+      plan: col3Input*24,
+      operation1:col4Input,
+      operation2:col5Input,
+      operation3:col6Input,
+      operation4:col7Input,
+      operation5:col8Input,
+      operation6:col9Input,
+      operation7:col10Input,
+      id: Date.now(),
+    };
+
+    setTables([...tables, newTableData]);
+    setCol1Input('');
+    setCol2Input('');
+    setCol3Input('');
+    setCol4Input('');
+    setCol5Input('');
+    setCol6Input('');
+    setCol7Input('');
+    setCol8Input('');
+    setCol9Input('');
+    setCol10Input('');
+
+  };
+
+  return (
+    <>
+      <div>
+        Из базы данных:
+        <label>Cтатус: </label>
+        <input
+          type="text"
+          value={col1Input}
+          onChange={(e) => setCol1Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Транзакция: </label>
+        <input
+          type="text"
+          value={col2Input}
+          onChange={(e) => setCol2Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>План на ППП, дней: </label>
+        <input
+          type="text"
+          value={col3Input}
+          onChange={(e) => setCol3Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 1: </label>
+        <input
+          type="text"
+          value={col4Input}
+          onChange={(e) => setCol4Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 2: </label>
+        <input
+          type="text"
+          value={col5Input}
+          onChange={(e) => setCol5Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 3: </label>
+        <input
+          type="text"
+          value={col6Input}
+          onChange={(e) => setCol6Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 4: </label>
+        <input
+          type="text"
+          value={col7Input}
+          onChange={(e) => setCol7Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 5: </label>
+        <input
+          type="text"
+          value={col8Input}
+          onChange={(e) => setCol8Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 6: </label>
+        <input
+          type="text"
+          value={col9Input}
+          onChange={(e) => setCol9Input(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Операция 7: </label>
+        <input
+          type="text"
+          value={col10Input}
+          onChange={(e) => setCol10Input(e.target.value)}
+        />
+      </div>
+
+      <button onClick={handleAddTable}>Добавить таблицу</button>
+    <table>
+    <Headtable/>
+    <tr>
+        <td colspan="23"></td>
+    </tr>
+    
+    {tables.map((tableData) => (
+        <NewTable key={tableData.id} bd={tableData} />
+      ))}
     </table>
     </>
   );
