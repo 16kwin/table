@@ -1,0 +1,19 @@
+button {
+    background-color: #e0e0e0; /* Серый цвет фона */
+    color: #333; /* Темно-серый цвет текста */
+    border: none; /* Убираем рамку */
+    border-radius: 20px; /* Делаем края округлыми */
+    padding: 8px 16px; /* Добавляем отступы */
+    font-size: 14px; /* Размер шрифта */
+    cursor: pointer; /* Меняем курсор при наведении */
+    transition: background-color 0.3s ease; /* Плавный переход цвета фона */
+  }
+  
+  button:hover {
+    background-color: #bdbdbd; /* Более темный серый цвет при наведении */
+  }
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }

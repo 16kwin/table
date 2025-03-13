@@ -8,5 +8,7 @@ table {
     border: 1px solid grey;
  }
  td {
-    width: 400px;
+    height:25px;
+    white-space: nowrap;
+
  }
