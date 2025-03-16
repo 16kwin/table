@@ -271,12 +271,12 @@ const formatDate2 = (timestamp) => {
     <tr>
         <td></td>
         <td>Отклонение от плана</td>
-        <td>93%</td>
+        <td>{item.planPppVar}%</td>
         <td></td>
         <td>Затрачено часов</td>
-        <td>96:00:00</td>
+        <td>{item.operationTimeSum}:00:00</td>
         <td>105%</td>
-        <td>5:00:00</td>
+        <td>{item.problemTimeSum}:00:00</td>
         <td></td>
         <td></td>
         <td></td>
