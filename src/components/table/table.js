@@ -126,8 +126,8 @@ const formatDate2 = (timestamp) => {
         <td rowspan="7">{item.planPpp}:00:00</td>
         <td>{item.operationNorm1}:00</td>
         <td>{item.optionNorm1}:00</td>
-        <td>{item.operationTime1}</td>
-        <td>100%</td>
+        <td>{item.operationTime1}:00:00</td>
+        <td>{item.closingTime1}%</td>
         <td>{item.problemTime1}:00</td>
         <td>{formatDate2(item.planDataStart1)}</td>
         <td>{formatDate2(item.forecastDataStart1)}</td>
@@ -147,8 +147,8 @@ const formatDate2 = (timestamp) => {
     <tr>
         <td>{item.operationNorm2}:00</td>
         <td>{item.optionNorm2}:00</td>
-        <td>{item.operationTime2}</td>
-        <td>100%</td>
+        <td>{item.operationTime2}:00:00</td>
+        <td>{item.closingTime2}%</td>
         <td>{item.problemTime2}:00</td>
         <td>{formatDate2(item.planDataStart2)}</td>
         <td>{formatDate2(item.forecastDataStart2)}</td>
@@ -167,8 +167,8 @@ const formatDate2 = (timestamp) => {
     <tr>
     <td>{item.operationNorm3}:00</td>
         <td>{item.optionNorm3}:00</td>
-        <td>{item.operationTime3}</td>
-        <td>139%</td>
+        <td>{item.operationTime3}:00:00</td>
+        <td>{item.closingTime3}%</td>
         <td>{item.problemTime3}:00</td>
         <td>{formatDate2(item.planDataStart3)}</td>
         <td>{formatDate2(item.forecastDataStart3)}</td>
@@ -188,8 +188,8 @@ const formatDate2 = (timestamp) => {
     <tr>
     <td>{item.operationNorm4}:00</td>
         <td>{item.optionNorm4}:00</td>
-        <td>{item.operationTime4}</td>
-        <td>94%</td>
+        <td>{item.operationTime4}:00:00</td>
+        <td>{item.closingTime4}%</td>
         <td>{item.problemTime4}:00</td>
         <td>{formatDate2(item.planDataStart4)}</td>
         <td>{formatDate2(item.forecastDataStart4)}</td>
@@ -209,8 +209,8 @@ const formatDate2 = (timestamp) => {
     <tr>
     <td>{item.operationNorm5}:00</td>
         <td>{item.optionNorm5}:00</td>
-        <td>{item.operationTime5}</td>
-        <td>100%</td>
+        <td>{item.operationTime5}:00:00</td>
+        <td>{item.closingTime5}%</td>
         <td>{item.problemTime5}:00</td>
         <td>{formatDate2(item.planDataStart5)}</td>
         <td>{formatDate2(item.forecastDataStart5)}</td>
@@ -230,8 +230,8 @@ const formatDate2 = (timestamp) => {
     <tr>
     <td>{item.operationNorm6}:00</td>
         <td>{item.optionNorm6}:00</td>
-        <td>{item.operationTime6}</td>
-        <td>100%</td>
+        <td>{item.operationTime6}:00:00</td>
+        <td>{item.closingTime6}%</td>
         <td>{item.problemTime6}:00</td>
         <td>{formatDate2(item.planDataStart6)}</td>
         <td>{formatDate2(item.forecastDataStart6)}</td>
@@ -251,8 +251,8 @@ const formatDate2 = (timestamp) => {
     <tr>
     <td>{item.operationNorm7}:00</td>
         <td>{item.optionNorm7}:00</td>
-        <td>{item.operationTime7}</td>
-        <td>100%</td>
+        <td>{item.operationTime7}:00:00</td>
+        <td>{item.closingTime7}%</td>
         <td>{item.problemTime7}:00</td>
         <td>{formatDate2(item.planDataStart7)}</td>
         <td>{formatDate2(item.forecastDataStart7)}</td>
@@ -275,7 +275,7 @@ const formatDate2 = (timestamp) => {
         <td></td>
         <td>Затрачено часов</td>
         <td>{item.operationTimeSum}:00:00</td>
-        <td>105%</td>
+        <td>{item.closingTimeAvg}%</td>
         <td>{item.problemTimeSum}:00:00</td>
         <td></td>
         <td></td>
