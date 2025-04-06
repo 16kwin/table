@@ -10,7 +10,7 @@ function Secondtable() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8080/employees/performance');
+        const response = await fetch('http://194.87.56.253:8080/employees/performance');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
