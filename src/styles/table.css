@@ -1,3 +1,4 @@
+
 table {
     border-collapse: collapse;
     /*убираем пустые промежутки между ячейками*/
@@ -11,4 +12,11 @@ table {
     height:25px;
     white-space: nowrap;
 
+ }
+ .exceedsNorm {
+   color: red;
+ }
+ 
+ .withinNorm {
+   color: green;
  }

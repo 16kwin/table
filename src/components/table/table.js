@@ -3,6 +3,9 @@ import '../../styles/table.css';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/ru';
+
+
+
 function Table() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +28,7 @@ function Table() {
       }
     };
 
+
     fetchData();
   }, []);
   const formatDate1 = (timestamp) => {
@@ -36,6 +40,9 @@ function Table() {
     return momentDate.tz(moment.tz.guess()).format('YYYY-MM-DD HH:mm:ss');
 };
 
+
+
+
 // Функция для форматирования только даты
 const formatDate2 = (timestamp) => {
     if (!timestamp) return '';
@@ -43,6 +50,65 @@ const formatDate2 = (timestamp) => {
     return momentDate.tz(moment.tz.guess()).format('YYYY-MM-DD');
 };
 
+function getOperationStartTime(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.startTime : "";
+}
+function getOperationStopTime(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.stopTime : "";
+}
+function getOperationNormValue(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.norm.operationNorm : "";
+}
+function getOptionNormValue(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.optionNorm : "";
+}
+function getOperationDuration(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.totalDuration : "";
+}
+function getOptionDuration(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.optionsDuration : "";
+}
+function getOperationNormDuration(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.operationDuration : "";
+}
+function getTimeExceedsNorm(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+
+  if (!operation) {
+    return ""; // Если операция не найдена
+  }
+
+  return operation.isTimeExceedsNorm ? "Да" : "Нет"; // Преобразование true/false в "Да"/"Нет"
+}
+
+function getOperationEmployeeName(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.employee.employeesName : "";
+}
+function getProblemTime(operations, operationType) {
+  const operation = operations.find(op => op.operationType === operationType);
+  return operation ? operation.problemsNormHours : "";
+}
+function getTimeDifferenceByOperationType(operationTimes, operationType) {
+  const operationTime = operationTimes.find(op => op.operationType === operationType);
+  return operationTime ? operationTime.timeDifference : "";
+}
+
+function getForecastDatesPlan(forecastDatesPlan, operationName) {
+  const forecastDateDto = forecastDatesPlan && forecastDatesPlan.find(op => op && op.operationName === operationName);
+  return forecastDateDto ? forecastDateDto.forecastDate : "";
+}
+function getForecastDatesStart(forecastDatesStart, operationName) {
+  const forecastDateDto = forecastDatesStart && forecastDatesStart.find(op => op && op.operationName === operationName);
+  return forecastDateDto ? forecastDateDto.forecastDate : "";
+}
   if (loading) {
     return <div>Загрузка...</div>;
   }
@@ -50,6 +116,8 @@ const formatDate2 = (timestamp) => {
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   }
+
+
 
   return (
 <>
@@ -64,9 +132,9 @@ const formatDate2 = (timestamp) => {
         <td rowspan="2">План на ППП, час</td>
         <td rowspan="2">Норматив на операцию, час</td>
         <td rowspan="2">Норматив на опцию, час</td>
-        <td rowspan="2">Затрачено, час</td>
+        <td rowspan="2">Затрачено факт, час</td>  
         <td rowspan="2">Закрытие в срок</td>
-        <td rowspan="2">Устранение неисправностей, час</td>
+        <td rowspan="2">Устранение отклонений, час</td>
         <td colspan="3">Начало ППП</td>
         <td rowspan="2">Входной контроль</td>
         <td rowspan="2">Подключение</td>
@@ -78,205 +146,235 @@ const formatDate2 = (timestamp) => {
         <td colspan="3">Завершение ППП</td>
         <td colspan="3">Дата отргузки</td>
 
-    </tr>
-    <tr>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    </tr>
-    {data.map((item) => (
-      <>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStart1C)}</td>
-        <td>{formatDate2(item.forecastDataStart1C)}</td>
-        <td>{formatDate2(item.factDataStart1C)}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStop1C)}</td>
-        <td>{formatDate2(item.forecastDataStop1C)}</td>
-        <td>{formatDate2(item.factDataStop1C)}</td>
-        <td rowspan="8">{formatDate2(item.planDataShipment1C)}</td>
-        <td rowspan="8">{formatDate2(item.forecastDataShipment1C)}</td>
-        <td rowspan="8">{formatDate2(item.factDataShipment1C)}</td>
-        
 
     </tr>
+    <tr>
+    <td>План</td>
+    <td>Прогноз</td>
+    <td>Факт</td>
+    <td>План</td>
+    <td>Прогноз</td>
+    <td>Факт</td>
+    <td>План</td>
+    <td>Прогноз</td>
+    <td>Факт</td>
+    </tr>
+
+
+
+
+    {data.ppps && data.ppps.map((item) => (
+      <React.Fragment key={item.transaction}>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{formatDate2(item.planDateStart)}</td>
+        <td>{formatDate2(item.forecastDateStart)}</td>
+        <td>{formatDate2(item.factDateStart)}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{formatDate2(item.planDateStop)}</td>
+        <td>{formatDate2(item.forecastDateStop)}</td>
+        <td>{formatDate2(item.factDateStop)}</td>
+        <td rowspan="8">{formatDate2(item.planDateShipment)}</td>
+        <td rowspan="8">{formatDate2(item.forecastDateShipment)}</td>
+        <td rowspan="8">{formatDate2(item.factDateShipment)}</td>
+    </tr>
+
+
+
+
     <tr>
         <td rowspan="7">{item.status}</td>
         <td rowspan="7">{item.transaction}</td>
         <td rowspan="7">{item.planPpp}:00:00</td>
-        <td>{item.operationNorm1}:00</td>
-        <td>{item.optionNorm1}:00</td>
-        <td>{item.operationTime1}:00:00</td>
-        <td>{item.closingTime1}%</td>
-        <td>{item.problemTime1}:00</td>
-        <td>{formatDate2(item.planDataStart1)}</td>
-        <td>{formatDate2(item.forecastDataStart1)}</td>
-        <td>{formatDate1(item.startTimePpp1)}</td>
-        <td>ФИО1 часов 4:00 Опции: 15:00</td>
+        <td>{getOperationNormValue(item.operations, "Входной контроль")}:00</td>
+        <td>{getOptionNormValue(item.operations, "Входной контроль")}</td>
+        <td>{getOperationDuration(item.operations, "Входной контроль")}</td>
+        <td>{getTimeExceedsNorm(item.operations, "Входной контроль")}</td>
+        <td>{getProblemTime(item.operations, "Входной контроль")}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Входной контроль")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Входной контроль")}</td>
+        <td>{formatDate1(getOperationStartTime(item.operations, "Входной контроль"))}</td>
+        <td>{getOperationEmployeeName(item.operations, "Входной контроль")}<br/>Операция {getOperationNormDuration(item.operations, "Входной контроль")}<br/>Опция {getOptionDuration(item.operations, "Входной контроль")}</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td>{formatDate2(item.planDataStart2)}</td>
-        <td>{formatDate2(item.forecastDataStart2)}</td>
-        <td>{formatDate1(item.stopTimePpp1)}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Подключение")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Подключение")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Входной контроль"))}</td>
+    </tr>
 
-    </tr>
-    <tr>
-        <td>{item.operationNorm2}:00</td>
-        <td>{item.optionNorm2}:00</td>
-        <td>{item.operationTime2}:00:00</td>
-        <td>{item.closingTime2}%</td>
-        <td>{item.problemTime2}:00</td>
-        <td>{formatDate2(item.planDataStart2)}</td>
-        <td>{formatDate2(item.forecastDataStart2)}</td>
-        <td>{formatDate1(item.startTimePpp2)}</td>
-        <td>0:20</td>
-        <td>ФИО2 часов 6:00 Опции: 15:00</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStart3)}</td>
-        <td>{formatDate2(item.forecastDataStart3)}</td>
-        <td>{formatDate1(item.stopTimePpp2)}</td>
-    </tr>
-    <tr>
-    <td>{item.operationNorm3}:00</td>
-        <td>{item.optionNorm3}:00</td>
-        <td>{item.operationTime3}:00:00</td>
-        <td>{item.closingTime3}%</td>
-        <td>{item.problemTime3}:00</td>
-        <td>{formatDate2(item.planDataStart3)}</td>
-        <td>{formatDate2(item.forecastDataStart3)}</td>
-        <td>{formatDate1(item.startTimePpp3)}</td>
-        <td></td>
-        <td>0:40</td>
-        <td>ФИО3 часов 15:00 Опции: 15:00</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStart4)}</td>
-        <td>{formatDate2(item.forecastDataStart4)}</td>
-        <td>{formatDate1(item.stopTimePpp3)}</td>
 
-    </tr>
-    <tr>
-    <td>{item.operationNorm4}:00</td>
-        <td>{item.optionNorm4}:00</td>
-        <td>{item.operationTime4}:00:00</td>
-        <td>{item.closingTime4}%</td>
-        <td>{item.problemTime4}:00</td>
-        <td>{formatDate2(item.planDataStart4)}</td>
-        <td>{formatDate2(item.forecastDataStart4)}</td>
-        <td>{formatDate1(item.startTimePpp4)}</td>
-        <td></td>
-        <td></td>
-        <td>20:20</td>
-        <td>ФИО4 часов 10:00 Опции: 8:00</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStart5)}</td>
-        <td>{formatDate2(item.forecastDataStart5)}</td>
-        <td>{formatDate1(item.stopTimePpp4)}</td>
 
-    </tr>
-    <tr>
-    <td>{item.operationNorm5}:00</td>
-        <td>{item.optionNorm5}:00</td>
-        <td>{item.operationTime5}:00:00</td>
-        <td>{item.closingTime5}%</td>
-        <td>{item.problemTime5}:00</td>
-        <td>{formatDate2(item.planDataStart5)}</td>
-        <td>{formatDate2(item.forecastDataStart5)}</td>
-        <td>{formatDate1(item.startTimePpp5)}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>1:20</td>
-        <td>ФИО5 часов 4:00 Опции: 15:00</td>
-        <td></td>
-        <td></td>
-        <td>{formatDate2(item.planDataStart6)}</td>
-        <td>{formatDate2(item.forecastDataStart6)}</td>
-        <td>{formatDate1(item.stopTimePpp5)}</td>
 
-    </tr>
     <tr>
-    <td>{item.operationNorm6}:00</td>
-        <td>{item.optionNorm6}:00</td>
-        <td>{item.operationTime6}:00:00</td>
-        <td>{item.closingTime6}%</td>
-        <td>{item.problemTime6}:00</td>
-        <td>{formatDate2(item.planDataStart6)}</td>
-        <td>{formatDate2(item.forecastDataStart6)}</td>
-        <td>{formatDate1(item.startTimePpp6)}</td>
+        <td>{getOperationNormValue(item.operations, "Подключение")}:00</td>
+        <td>{getOptionNormValue(item.operations, "Подключение")}</td>
+        <td>{getOperationDuration(item.operations, "Подключение")}</td>
+        <td>{getTimeExceedsNorm(item.operations, "Подключение")}</td>
+        <td>{getProblemTime(item.operations, "Подключение")}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Подключение")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Подключение")}</td>
+        <td>{formatDate1(getOperationStartTime(item.operations, "Подключение"))}</td>
+        <td>{getTimeDifferenceByOperationType(item.operationTimes, "Подключение")}</td>
+        <td>{getOperationEmployeeName(item.operations, "Подключение")}<br/>Операция {getOperationNormDuration(item.operations, "Подключение")}<br/>Опция {getOptionDuration(item.operations, "Подключение")}</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td>0:20</td>
-        <td>ФИО6 часов 5:30 Опции: 15:00</td>
         <td></td>
-        <td>{formatDate2(item.planDataStart7)}</td>
-        <td>{formatDate2(item.forecastDataStart7)}</td>
-        <td>{formatDate1(item.stopTimePpp6)}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка механиком")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка механиком")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Подключение"))}</td>
+    </tr>
 
-    </tr>
+
+
+
     <tr>
-    <td>{item.operationNorm7}:00</td>
-        <td>{item.optionNorm7}:00</td>
-        <td>{item.operationTime7}:00:00</td>
-        <td>{item.closingTime7}%</td>
-        <td>{item.problemTime7}:00</td>
-        <td>{formatDate2(item.planDataStart7)}</td>
-        <td>{formatDate2(item.forecastDataStart7)}</td>
-        <td>{formatDate1(item.startTimePpp7)}</td>
+    <td>{getOperationNormValue(item.operations, "Проверка механиком")}:00</td>
+        <td>{getOptionNormValue(item.operations, "Проверка механиком")}</td>
+        <td>{getOperationDuration(item.operations, "Проверка механиком")}</td>
+        <td>{getTimeExceedsNorm(item.operations, "Проверка механиком")}</td>
+        <td>{getProblemTime(item.operations, "Проверка механиком")}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка механиком")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка механиком")}</td>
+        <td>{formatDate1(getOperationStartTime(item.operations, "Проверка механиком"))}</td>
+        <td></td>
+        <td>{getTimeDifferenceByOperationType(item.operationTimes, "Проверка механиком")}</td>
+        <td>{getOperationEmployeeName(item.operations, "Проверка механиком")}<br/>Операция {getOperationNormDuration(item.operations, "Проверка механиком")}<br/>Опция {getOptionDuration(item.operations, "Проверка механиком")}</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td></td>
-        <td>1:20</td>
-        <td>ФИО7 часов 5:00 Опции: 15:00</td>
-        <td>{formatDate2(item.planDataStart8)}</td>
-        <td>{formatDate2(item.forecastDataStart8)}</td>
-        <td>{formatDate1(item.stopTimePpp7)}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка электронщиком")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка электронщиком")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка механиком"))}</td>
     </tr>
+
+
+
+
+
+    <tr>
+    <td>{getOperationNormValue(item.operations, "Проверка электронщиком")}:00</td>
+        <td>{getOptionNormValue(item.operations, "Проверка электронщиком")}</td>
+        <td>{getOperationDuration(item.operations, "Проверка электронщиком")}</td>
+        <td>{getTimeExceedsNorm(item.operations, "Проверка электронщиком")}</td>
+        <td>{getProblemTime(item.operations, "Проверка электронщиком")}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка электронщиком")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка электронщиком")}</td>
+        <td>{formatDate1(getOperationStartTime(item.operations, "Проверка электронщиком"))}</td>
+        <td></td>
+        <td></td>
+        <td>{getTimeDifferenceByOperationType(item.operationTimes, "Проверка электронщиком")}</td>
+        <td>{getOperationEmployeeName(item.operations, "Проверка электронщиком")}<br/>Операция {getOperationNormDuration(item.operations, "Проверка электронщиком")}<br/>Опция {getOptionDuration(item.operations, "Проверка электронщиком")}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка технологом")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка технологом")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка электронщиком"))}</td>
+    </tr>
+
+
+
+
+    <tr>
+    <td>{getOperationNormValue(item.operations, "Проверка технологом")}:00</td>
+        <td>{getOptionNormValue(item.operations, "Проверка технологом")}</td>
+        <td>{getOperationDuration(item.operations, "Проверка технологом")}</td>
+        <td>{getTimeExceedsNorm(item.operations, "Проверка технологом")}</td>
+        <td>{getProblemTime(item.operations, "Проверка технологом")}</td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка технологом")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка технологом")}</td>
+        <td>{formatDate1(getOperationStartTime(item.operations, "Проверка технологом"))}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{getTimeDifferenceByOperationType(item.operationTimes, "Проверка технологом")}</td>
+        <td>{getOperationEmployeeName(item.operations, "Проверка технологом")}<br/>Операция {getOperationNormDuration(item.operations, "Проверка технологом")}<br/>Опция {getOptionDuration(item.operations, "Проверка технологом")}</td>
+        <td></td>
+        <td></td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Выходной контроль")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Выходной контроль")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка технологом"))}</td>
+    </tr>
+
+
+
+
+    <tr>
+    <td>{getOperationNormValue(item.operations, "Выходной контроль")}:00</td>
+    <td>{getOptionNormValue(item.operations, "Выходной контроль")}</td>
+    <td>{getOperationDuration(item.operations, "Выходной контроль")}</td>
+    <td>{getTimeExceedsNorm(item.operations, "Выходной контроль")}</td>
+    <td>{getProblemTime(item.operations, "Выходной контроль")}</td>
+    <td>{getForecastDatesPlan(item.forecastDatesPlan, "Выходной контроль")}</td>
+    <td>{getForecastDatesStart(item.forecastDatesStart, "Выходной контроль")}</td>
+    <td>{formatDate1(getOperationStartTime(item.operations, "Выходной контроль"))}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{getTimeDifferenceByOperationType(item.operationTimes, "Выходной контроль")}</td>
+        <td>{getOperationEmployeeName(item.operations, "Выходной контроль")}<br/>Операция {getOperationNormDuration(item.operations, "Выходной контроль")}<br/>Опция {getOptionDuration(item.operations, "Выходной контроль")}</td>
+        <td></td>
+        <td>{getForecastDatesPlan(item.forecastDatesPlan, "Транспортное положение")}</td>
+        <td>{getForecastDatesStart(item.forecastDatesStart, "Транспортное положение")}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Выходной контроль"))}</td>
+    </tr>
+
+
+
+
+    <tr>
+    <td>{getOperationNormValue(item.operations, "Транспортное положение")}:00</td>
+    <td>{getOptionNormValue(item.operations, "Транспортное положение")}</td>
+    <td>{getOperationDuration(item.operations, "Транспортное положение")}</td>
+    <td>{getTimeExceedsNorm(item.operations, "Транспортное положение")}</td>
+    <td>{getProblemTime(item.operations, "Транспортное положение")}</td>
+    <td>{getForecastDatesPlan(item.forecastDatesPlan, "Транспортное положение")}</td>
+    <td>{getForecastDatesStart(item.forecastDatesStart, "Транспортное положение")}</td>
+    <td>{formatDate1(getOperationStartTime(item.operations, "Транспортное положение"))}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{getTimeDifferenceByOperationType(item.operationTimes, "Транспортное положение")}</td>
+    <td>{getOperationEmployeeName(item.operations, "Транспортное положение")}<br/>Операция {getOperationNormDuration(item.operations, "Транспортное положение")}<br/>Опция {getOptionDuration(item.operations, "Транспортное положение")}</td>
+    <td>{item.extendedTransportPositionDatePlan}</td>
+    <td>{item.extendedTransportPositionDate}</td>
+    <td>{formatDate1(getOperationStopTime(item.operations, "Транспортное положение"))}</td>
+    </tr>
+
+
+    
     <tr>
         <td></td>
         <td>Отклонение от плана</td>
-        <td>{item.planPppVar}%</td>
+        <td>{item.completionPercentage}%</td>
         <td></td>
         <td>Затрачено часов</td>
-        <td>{item.operationTimeSum}:00:00</td>
-        <td>{item.closingTimeAvg}%</td>
-        <td>{item.problemTimeSum}:00:00</td>
+        <td>{item.totalDurationSum}</td>
+        <td></td>
+        <td>{item.totalProblemsNormHours}:00:00</td>
         <td></td>
         <td></td>
         <td></td>
@@ -286,15 +384,17 @@ const formatDate2 = (timestamp) => {
         <td></td>
         <td></td>
         <td>Межоперационное ожидание</td>
-        <td>24:20:00</td>
+        <td>{item.positiveInterOperationTimeSum}</td>
         <td></td>
-        <td>Итого время такта</td>
-        <td>98:20:00</td>
+        <td>Итоговое время цикла</td>
+        <td>{item.totalSum}</td>
         <td></td>
         <td></td>
         <td></td>
     </tr>
-</>
+    <br/>
+</React.Fragment>
+
 ))}
     </table>
     </>

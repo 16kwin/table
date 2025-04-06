@@ -3,7 +3,7 @@ import '../../styles/secondtable.css';
 function Thirdtable() {
   return (
     <>
-третья таблица
+В разработке
     </>
   );
 }

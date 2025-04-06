@@ -4,9 +4,9 @@ import '../styles/header.css';
 function Header({ onButtonClick }) {
   return (
     <div className="button-container">
-        <button onClick={() => onButtonClick('content1')}>First table</button>
-        <button onClick={() => onButtonClick('content2')}>Second table</button>
-        <button onClick={() => onButtonClick('content3')}>Third table</button>
+        <button onClick={() => onButtonClick('content1')}>Доска производственного анализа</button>
+        <button onClick={() => onButtonClick('content2')}>Сводная ведомость выроботки по сотрудникам</button>
+        <button onClick={() => onButtonClick('content3')}>Сводная ведомость по потерям производственного времени</button>
     </div>
   );
 }
