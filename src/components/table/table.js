@@ -1,15 +1,16 @@
-import Headtable from "../headtable/headtable.js"
+import Headtable from "../headtable/headtable.js";
 import '../../styles/table.css';
 import React, { useState, useEffect } from 'react';
 import moment from 'moment-timezone';
 import 'moment/locale/ru';
-
-
+import TableFilters from "./TableFilters"; // Импортируем TableFilters
 
 function Table() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filteredData, setFilteredData] = useState([]); // State для отфильтрованных данных
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -27,7 +28,6 @@ function Table() {
         setLoading(false);
       }
     };
-
 
     fetchData();
   }, []);
@@ -121,10 +121,11 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
 
   return (
 <>
+<TableFilters data={data} onFilter={setFilteredData} /> {/* Используем TableFilters */}
     <table>
     <Headtable/>
     <tr>
-        <td colspan="23"></td>
+        <td colspan="24"></td>
     </tr>
     <tr>
         <td rowspan="2">Статус</td>
@@ -163,8 +164,8 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
 
 
 
-    {data.ppps && data.ppps.map((item) => (
-      <React.Fragment key={item.transaction}>
+    {filteredData.map((item) => ( // Отображаем отфильтрованные данные
+          <React.Fragment key={item.transaction}>
     <tr>
         <td></td>
         <td></td>
