@@ -12,7 +12,7 @@ function Secondtable() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      let url = 'http://localhost:8080/employees/performance';
+      let url = 'http://194.87.56.253:8080/employees/performance';
       const params = new URLSearchParams();
 
       if (selectedMonth) {
