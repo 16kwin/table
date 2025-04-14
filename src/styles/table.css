@@ -1,22 +1,81 @@
-
+/* Общие стили для таблицы */
 table {
-    border-collapse: collapse;
-    /*убираем пустые промежутки между ячейками*/
-    border: 1px solid grey;
-    /*устанавливаем для таблицы внешнюю границу серого цвета толщиной 1px*/
- }
- th, td {
-    border: 1px solid grey;
- }
- td {
-    height:25px;
-    white-space: nowrap;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3px;
+  /* Добавлено: */
+  table-layout: fixed; /*  Важно: фиксированная ширина столбцов */
+}
 
- }
- .exceedsNorm {
-   color: red;
- }
- 
- .withinNorm {
-   color: green;
- }
+/* Стили для заголовков */
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+/* Стили для ячеек */
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  word-wrap: break-word; /* Перенос длинных слов, не разбивая их */
+  vertical-align: top;
+  white-space: pre-wrap; /* Добавлено для сохранения переносов строк и пробелов */
+  /* Добавлено: */
+  overflow: hidden; /*  Скрываем содержимое, выходящее за границы ячейки */
+}
+
+/* Стили для ячеек с датами */
+.date-cell {
+  white-space: nowrap; /* Запрещает перенос строк в ячейках с датами */
+}
+
+/* Чередование цветов строк */
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Стили для переноса строк в ячейках с именами сотрудников (возможно, уже не нужно) */
+td br {
+  display: block;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
+}
+
+/* Стили для контейнера таблицы */
+.table-container {
+  margin-top: 20px;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
+  padding-bottom: 20px;
+  /* Добавлено: */ /* Включаем горизонтальную прокрутку контейнера */
+}
+
+/* Стили для ячеек в "шапке" таблицы */
+.sticky-header td,
+.sticky-header th {
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.table-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.green {
+  background-color: green;
+  color: white;
+}
+
+.red {
+  background-color: red;
+  color: white;
+}

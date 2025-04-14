@@ -1,0 +1,59 @@
+/* Общее оформление строки таблицы */
+tr {
+  background-color: #f0f0f0; /* Светло-серый фон */
+  padding: 8px 0; /* Отступы сверху и снизу по 8px */
+  border-bottom: 1px solid #ccc; /* Тонкая серая граница снизу */
+}
+
+/* Оформление ячеек заголовка */
+th {
+  background-color: #ddd; /* Еще более светло-серый фон */
+  color: #333; /* Темно-серый текст */
+  font-weight: bold; /* Жирный текст */
+  text-align: center; /* Выравнивание текста по центру */
+  padding: 8px; /* Внутренние отступы по 8px */
+}
+
+/* Оформление текста внутри ячеек (особенно для многострочного текста) */
+th br {
+  /*Обращаемся к тегу br, чтобы задать стили для переноса строк*/
+  display: block;
+  margin-bottom: 5px; /*Добавляем отступ под каждой строкой, созданной тегом <br>*/
+}
+
+/* Стили для ячеек (td) - ДОБАВЛЕНО */
+td {
+  word-wrap: break-word; /* Перенос длинных слов, не разбивая их */
+  white-space: pre-wrap; /* Сохраняем переносы строк и пробелы */
+  overflow: hidden;      /* Скрываем контент, выходящий за границы */
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+
+/* Общие стили для таблицы - ДОБАВЛЕНО */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Фиксированная ширина столбцов */
+}
+
+/* Контейнер таблицы - ДОБАВЛЕНО */
+.table-container {
+  overflow-x: auto; /* Горизонтальная прокрутка, если таблица шире контейнера */
+  margin-top: 20px; /* Добавь отступ сверху, если нужно */
+}
+
+.green {
+  background-color: green;
+  color: black;
+}
+
+.red {
+  background-color: red;
+  color: black;
+}
+.date-cell {
+  white-space: nowrap; /* Запрещает перенос строк в ячейках с датами */
+}

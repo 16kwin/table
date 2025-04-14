@@ -1,0 +1,29 @@
+.filters-container {
+    display: flex; /* Используем Flexbox для размещения фильтров в одну строку */
+    align-items: center; /* Выравниваем элементы по вертикали */
+    padding: 10px; /* Добавляем немного отступов */
+    border: 1px solid #ddd; /* Добавляем границу */
+    margin-bottom: 10px; /* Добавляем отступ снизу */
+    flex-wrap: wrap; /* Позволяем фильтрам переноситься на новую строку, если они не помещаются */ /* Добавляем отступы между фильтрами */
+    width: 100%; /* Занимает всю ширину контейнера */
+  }
+  
+  .filter-group {
+    display: flex; /* Используем Flexbox для размещения элементов внутри фильтра */
+    align-items: center; /* Выравниваем элементы по вертикали */
+    margin-right: 10px; /* Добавляем отступ справа */
+    width: calc(25% - 10px); /* Занимает 25% ширины, минус отступы */
+    box-sizing: border-box; /* Включаем box-sizing, чтобы padding и border не увеличивали ширину */
+  }
+  
+  .filter-group label {
+    margin-right: 5px; /* Добавляем отступ справа от label */
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    padding: 5px; /* Добавляем отступы внутри select и input */
+    border: 1px solid #ddd; /* Добавляем границу */
+    border-radius: 4px; /* Добавляем скругление углов */
+    width: 100%; /* Занимает всю ширину фильтра */
+  }

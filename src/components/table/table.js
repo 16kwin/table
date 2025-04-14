@@ -15,7 +15,7 @@ function Table() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://194.87.56.253:8080/api/ppp');
+        const response = await fetch('http://localhost:8080/api/ppp');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -85,13 +85,34 @@ function getTimeExceedsNorm(operations, operationType) {
     return ""; // Если операция не найдена
   }
 
-  return operation.isTimeExceedsNorm ? "Да" : "Нет"; // Преобразование true/false в "Да"/"Нет"
+  return operation.isTimeExceedsNorm ? <td className="green">Да</td> : <td className="red">Нет</td>; // Преобразование true/false в "Да"/"Нет"
 }
+function formatEmployeeName(fullName) {
+  if (!fullName) {
+    return ""; // Возвращаем пустую строку, если имя не передано
+  }
 
+  const parts = fullName.split(" "); // Разделяем строку на части по пробелам
+  if (parts.length < 3) {
+    return fullName; // Если меньше трёх частей (например, только имя), возвращаем как есть
+  }
+
+  const lastName = parts[0]; // Фамилия - первая часть
+  const firstName = parts[1]; // Имя - вторая часть
+  const middleName = parts[2]; // Отчество - третья часть
+
+  const initials = `${firstName.charAt(0).toUpperCase()}.${middleName.charAt(0).toUpperCase()}.`; // Инициалы: первая буква имени и отчества с точками
+
+  return `${lastName} ${initials}`; // Возвращаем фамилию и инициалы
+}
 function getOperationEmployeeName(operations, operationType) {
   const operation = operations.find(op => op.operationType === operationType);
-  return operation ? operation.employee.employeesName : "";
+  if (operation && operation.employee && operation.employee.employeesName) {
+    return formatEmployeeName(operation.employee.employeesName); // Используем formatEmployeeName
+  }
+  return "";
 }
+
 function getProblemTime(operations, operationType) {
   const operation = operations.find(op => op.operationType === operationType);
   return operation ? operation.problemsNormHours : "";
@@ -109,6 +130,19 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
   const forecastDateDto = forecastDatesStart && forecastDatesStart.find(op => op && op.operationName === operationName);
   return forecastDateDto ? forecastDateDto.forecastDate : "";
 }
+function getCompletionPercentageDisplay(percentage) {
+  const percentageValue = Number(percentage); // Преобразуем в число
+
+  if (isNaN(percentageValue)) {
+    return <div>Неизвестно</div>; // Обработка нечисловых значений
+  }
+
+  if (percentageValue < 100) {
+    return <td className="red">{percentage}%</td>;
+  } else {
+    return <td className="green">{percentage}%</td>;
+  }
+}
   if (loading) {
     return <div>Загрузка...</div>;
   }
@@ -122,48 +156,50 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
   return (
 <>
 <TableFilters data={data} onFilter={setFilteredData} /> {/* Используем TableFilters */}
+<div className="table-container">
     <table>
-    <Headtable/>
-    <tr>
-        <td colspan="24"></td>
-    </tr>
-    <tr>
-        <td rowspan="2">Статус</td>
-        <td rowspan="2">Транзакция</td>
-        <td rowspan="2">План на ППП, час</td>
-        <td rowspan="2">Норматив на операцию, час</td>
-        <td rowspan="2">Норматив на опцию, час</td>
-        <td rowspan="2">Затрачено факт, час</td>  
-        <td rowspan="2">Закрытие в срок</td>
-        <td rowspan="2">Устранение отклонений, час</td>
-        <td colspan="3">Начало ППП</td>
-        <td rowspan="2">Входной контроль</td>
-        <td rowspan="2">Подключение</td>
-        <td rowspan="2">Проверка механиком</td>
-        <td rowspan="2">Проверка электронщиком</td>
-        <td rowspan="2">Проверка технологом</td>
-        <td rowspan="2">Выходной контроль</td>
-        <td rowspan="2">Транспортное</td>
-        <td colspan="3">Завершение ППП</td>
-        <td colspan="3">Дата отргузки</td>
+        <thead className="sticky-header">
+            <Headtable />
+            <tr>
+                <td colspan="24"></td>
+            </tr>
+            <tr>
+                <td rowspan="2">Статус</td>
+                <td rowspan="2">Транзакция</td>
+                <td rowspan="2">План на ППП, час</td>
+                <td rowspan="2">Норматив на операцию, час</td>
+                <td rowspan="2">Норматив на опцию, час</td>
+                <td rowspan="2">Затрачено факт, час</td>
+                <td rowspan="2">Закрытие в срок</td>
+                <td rowspan="2">Устранение отклонений, час</td>
+                <td colspan="3">Начало ППП</td>
+                <td rowspan="2">Входной контроль</td>
+                <td rowspan="2">Подключение</td>
+                <td rowspan="2">Проверка механиком</td>
+                <td rowspan="2">Проверка электронщиком</td>
+                <td rowspan="2">Проверка технологом</td>
+                <td rowspan="2">Выходной контроль</td>
+                <td rowspan="2">Транспортное</td>
+                <td colspan="3">Завершение ППП</td>
+                <td colspan="3">Дата отргузки</td>
 
 
-    </tr>
-    <tr>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    <td>План</td>
-    <td>Прогноз</td>
-    <td>Факт</td>
-    </tr>
+            </tr>
+            <tr>
+                <td>План</td>
+                <td>Прогноз</td>
+                <td>Факт</td>
+                <td>План</td>
+                <td>Прогноз</td>
+                <td>Факт</td>
+                <td>План</td>
+                <td>Прогноз</td>
+                <td>Факт</td>
+            </tr>
+        </thead>
 
 
-
-
+    <tbody>
     {filteredData.map((item) => ( // Отображаем отфильтрованные данные
           <React.Fragment key={item.transaction}>
     <tr>
@@ -175,9 +211,9 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
         <td></td>
         <td></td>
         <td></td>
-        <td>{formatDate2(item.planDateStart)}</td>
-        <td>{formatDate2(item.forecastDateStart)}</td>
-        <td>{formatDate2(item.factDateStart)}</td>
+        <td className="date-cell">{formatDate2(item.planDateStart)}</td>
+        <td className="date-cell">{formatDate2(item.forecastDateStart)}</td>
+        <td className="date-cell">{formatDate2(item.factDateStart)}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -185,12 +221,12 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
         <td></td>
         <td></td>
         <td></td>
-        <td>{formatDate2(item.planDateStop)}</td>
-        <td>{formatDate2(item.forecastDateStop)}</td>
-        <td>{formatDate2(item.factDateStop)}</td>
-        <td rowspan="8">{formatDate2(item.planDateShipment)}</td>
-        <td rowspan="8">{formatDate2(item.forecastDateShipment)}</td>
-        <td rowspan="8">{formatDate2(item.factDateShipment)}</td>
+        <td className="date-cell">{formatDate2(item.planDateStop)}</td>
+        <td className="date-cell">{formatDate2(item.forecastDateStop)}</td>
+        <td className="date-cell">{formatDate2(item.factDateStop)}</td>
+        <td rowspan="8" className="date-cell">{formatDate2(item.planDateShipment)}</td>
+        <td rowspan="8" className="date-cell">{formatDate2(item.forecastDateShipment)}</td>
+        <td rowspan="8" className="date-cell">{formatDate2(item.factDateShipment)}</td>
     </tr>
 
 
@@ -203,7 +239,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
         <td>{getOperationNormValue(item.operations, "Входной контроль")}:00</td>
         <td>{getOptionNormValue(item.operations, "Входной контроль")}</td>
         <td>{getOperationDuration(item.operations, "Входной контроль")}</td>
-        <td>{getTimeExceedsNorm(item.operations, "Входной контроль")}</td>
+        {getTimeExceedsNorm(item.operations, "Входной контроль")}
         <td>{getProblemTime(item.operations, "Входной контроль")}</td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Входной контроль")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Входной контроль")}</td>
@@ -227,7 +263,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
         <td>{getOperationNormValue(item.operations, "Подключение")}:00</td>
         <td>{getOptionNormValue(item.operations, "Подключение")}</td>
         <td>{getOperationDuration(item.operations, "Подключение")}</td>
-        <td>{getTimeExceedsNorm(item.operations, "Подключение")}</td>
+        {getTimeExceedsNorm(item.operations, "Подключение")}
         <td>{getProblemTime(item.operations, "Подключение")}</td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Подключение")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Подключение")}</td>
@@ -251,7 +287,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <td>{getOperationNormValue(item.operations, "Проверка механиком")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка механиком")}</td>
         <td>{getOperationDuration(item.operations, "Проверка механиком")}</td>
-        <td>{getTimeExceedsNorm(item.operations, "Проверка механиком")}</td>
+        {getTimeExceedsNorm(item.operations, "Проверка механиком")}
         <td>{getProblemTime(item.operations, "Проверка механиком")}</td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка механиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка механиком")}</td>
@@ -276,7 +312,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <td>{getOperationNormValue(item.operations, "Проверка электронщиком")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка электронщиком")}</td>
         <td>{getOperationDuration(item.operations, "Проверка электронщиком")}</td>
-        <td>{getTimeExceedsNorm(item.operations, "Проверка электронщиком")}</td>
+        {getTimeExceedsNorm(item.operations, "Проверка электронщиком")}
         <td>{getProblemTime(item.operations, "Проверка электронщиком")}</td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка электронщиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка электронщиком")}</td>
@@ -300,7 +336,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <td>{getOperationNormValue(item.operations, "Проверка технологом")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка технологом")}</td>
         <td>{getOperationDuration(item.operations, "Проверка технологом")}</td>
-        <td>{getTimeExceedsNorm(item.operations, "Проверка технологом")}</td>
+        {getTimeExceedsNorm(item.operations, "Проверка технологом")}
         <td>{getProblemTime(item.operations, "Проверка технологом")}</td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка технологом")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка технологом")}</td>
@@ -324,7 +360,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <td>{getOperationNormValue(item.operations, "Выходной контроль")}:00</td>
     <td>{getOptionNormValue(item.operations, "Выходной контроль")}</td>
     <td>{getOperationDuration(item.operations, "Выходной контроль")}</td>
-    <td>{getTimeExceedsNorm(item.operations, "Выходной контроль")}</td>
+    {getTimeExceedsNorm(item.operations, "Выходной контроль")}
     <td>{getProblemTime(item.operations, "Выходной контроль")}</td>
     <td>{getForecastDatesPlan(item.forecastDatesPlan, "Выходной контроль")}</td>
     <td>{getForecastDatesStart(item.forecastDatesStart, "Выходной контроль")}</td>
@@ -348,7 +384,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <td>{getOperationNormValue(item.operations, "Транспортное положение")}:00</td>
     <td>{getOptionNormValue(item.operations, "Транспортное положение")}</td>
     <td>{getOperationDuration(item.operations, "Транспортное положение")}</td>
-    <td>{getTimeExceedsNorm(item.operations, "Транспортное положение")}</td>
+    {getTimeExceedsNorm(item.operations, "Транспортное положение")}
     <td>{getProblemTime(item.operations, "Транспортное положение")}</td>
     <td>{getForecastDatesPlan(item.forecastDatesPlan, "Транспортное положение")}</td>
     <td>{getForecastDatesStart(item.forecastDatesStart, "Транспортное положение")}</td>
@@ -370,7 +406,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
     <tr>
         <td></td>
         <td>Отклонение от плана</td>
-        <td>{item.completionPercentage}%</td>
+        {getCompletionPercentageDisplay(item.completionPercentage)}
         <td></td>
         <td>Затрачено часов</td>
         <td>{item.totalDurationSum}</td>
@@ -397,7 +433,9 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
 </React.Fragment>
 
 ))}
+</tbody>
     </table>
+    </div>
     </>
   );
 }
