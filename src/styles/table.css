@@ -1,10 +1,10 @@
 /* Общие стили для таблицы */
 table {
-  width: 100%;
+  width: auto; /* Важно: Автоматическая ширина таблицы */
+  min-width: 1500px; /* Установи минимальную ширину таблицы (подбери значение) */
   border-collapse: collapse;
   margin: 3px;
-  /* Добавлено: */
-  table-layout: fixed; /*  Важно: фиксированная ширина столбцов */
+  table-layout: fixed; /* Важно: фиксированная ширина столбцов */
 }
 
 /* Стили для заголовков */
@@ -49,15 +49,19 @@ td br {
   z-index: 1;
 }
 
-/* Стили для контейнера таблицы */
 .table-container {
   margin-top: 20px;
-  overflow-y: auto;
-  max-height: calc(100vh - 80px);
+  overflow-x: auto; /* Включаем горизонтальную прокрутку */
+  overflow-y: auto; /* Включаем вертикальную прокрутку (и скроем её) */
+  max-height: calc(100vh - 150px);
   padding-bottom: 20px;
-  /* Добавлено: */ /* Включаем горизонтальную прокрутку контейнера */
 }
 
+/* Скрываем вертикальный скроллбар в WebKit браузерах (Chrome, Safari) */
+.table-container::-webkit-scrollbar-vertical {
+  width: 0px;
+  background: transparent;
+}
 /* Стили для ячеек в "шапке" таблицы */
 .sticky-header td,
 .sticky-header th {
@@ -65,10 +69,6 @@ td br {
   border: 1px solid #ddd;
 }
 
-.table-container::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
 
 .green {
   background-color: green;

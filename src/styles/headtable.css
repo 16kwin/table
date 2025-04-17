@@ -1,50 +1,48 @@
 /* Общее оформление строки таблицы */
 tr {
-  background-color: #f0f0f0; /* Светло-серый фон */
-  padding: 8px 0; /* Отступы сверху и снизу по 8px */
-  border-bottom: 1px solid #ccc; /* Тонкая серая граница снизу */
+  background-color: #f0f0f0;
+  padding: 8px 0;
+  border-bottom: 1px solid #ccc;
 }
 
 /* Оформление ячеек заголовка */
 th {
-  background-color: #ddd; /* Еще более светло-серый фон */
-  color: #333; /* Темно-серый текст */
-  font-weight: bold; /* Жирный текст */
-  text-align: center; /* Выравнивание текста по центру */
-  padding: 8px; /* Внутренние отступы по 8px */
+  background-color: #ddd;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 8px;
+  word-wrap: break-word; /* Добавлено для переноса слов в заголовках */
 }
 
 /* Оформление текста внутри ячеек (особенно для многострочного текста) */
 th br {
-  /*Обращаемся к тегу br, чтобы задать стили для переноса строк*/
   display: block;
-  margin-bottom: 5px; /*Добавляем отступ под каждой строкой, созданной тегом <br>*/
+  margin-bottom: 5px;
 }
 
-/* Стили для ячеек (td) - ДОБАВЛЕНО */
+/* Стили для ячеек (td) */
 td {
-  word-wrap: break-word; /* Перенос длинных слов, не разбивая их */
-  white-space: pre-wrap; /* Сохраняем переносы строк и пробелы */
-  overflow: hidden;      /* Скрываем контент, выходящий за границы */
+  word-wrap: break-word; /* Перенос длинных слов */
+  white-space: nowrap; /* Запрет переноса строк в ячейках */
+  overflow: hidden;
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
   vertical-align: top;
 }
 
-/* Общие стили для таблицы - ДОБАВЛЕНО */
+/* Общие стили для таблицы */
 table {
-  width: 100%;
+  width: auto; /* Важно: Автоматическая ширина таблицы */
+  min-width: 1500px; /* Установи минимальную ширину таблицы (подбери значение) */
   border-collapse: collapse;
+  margin: 3px;
   table-layout: fixed; /* Фиксированная ширина столбцов */
 }
 
-/* Контейнер таблицы - ДОБАВЛЕНО */
-.table-container {
-  overflow-x: auto; /* Горизонтальная прокрутка, если таблица шире контейнера */
-  margin-top: 20px; /* Добавь отступ сверху, если нужно */
-}
 
+/* Стили для "зеленых" и "красных" ячеек */
 .green {
   background-color: green;
   color: black;
@@ -54,6 +52,7 @@ table {
   background-color: red;
   color: black;
 }
+
 .date-cell {
   white-space: nowrap; /* Запрещает перенос строк в ячейках с датами */
 }

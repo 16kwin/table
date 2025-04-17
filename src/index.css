@@ -1,7 +1,8 @@
 html, body {
     height: 100%;
     margin: 5px;
-    overflow: hidden; /* Убери стандартные отступы */
+    overflow-x: hidden;
+    overflow-y: hidden; /* Убери стандартные отступы */
   }
 #root {
     height: 100%;
