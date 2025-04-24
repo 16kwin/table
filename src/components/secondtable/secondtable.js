@@ -12,7 +12,7 @@ function Secondtable() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      let url = 'http://194.87.56.253:8080/employees/performance';
+      let url = 'http://localhost:8080/employees/performance';
       const params = new URLSearchParams();
 
       if (selectedMonth) {
@@ -102,7 +102,7 @@ function Secondtable() {
       return <div className="neutral">Неизвестно</div>;
     }
   
-    if (percentageValue >= 100) {
+    if (percentageValue >= 80) {
       
       return <td className="green">{percentage}%</td>;
     } else {
@@ -146,6 +146,7 @@ function Secondtable() {
           </select>
         </div>
       </div>
+      <div className="table-container">
       <table>
         <thead className="sticky-header">
           <tr>
@@ -178,6 +179,7 @@ function Secondtable() {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

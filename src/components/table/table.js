@@ -15,7 +15,7 @@ function Table() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://194.87.56.253:8080/api/ppp');
+        const response = await fetch('http://localhost:8080/api/ppp');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -112,14 +112,41 @@ function getOperationEmployeeName(operations, operationType) {
   }
   return "";
 }
+function calculateWorkingDaysString(totalSum) {
+  if (!totalSum) {
+    return "Нет данных"; // Или другое сообщение по умолчанию
+  }
 
+  const [hours, minutes, seconds] = totalSum.split(':').map(Number);
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+  const totalHours = totalSeconds / 3600;
+  const workingDays = Math.ceil(totalHours / 8);
+
+  return `${totalSum}, ${workingDays} рабочих дней`;
+}
 function getProblemTime(operations, operationType) {
   const operation = operations.find(op => op.operationType === operationType);
   return operation ? operation.problemsNormHours : "";
 }
 function getTimeDifferenceByOperationType(operationTimes, operationType) {
   const operationTime = operationTimes.find(op => op.operationType === operationType);
-  return operationTime ? operationTime.timeDifference : "";
+
+  if (!operationTime) {
+    return "Нет данных"; // Или любое другое сообщение по умолчанию
+  }
+
+  const timeDifferenceString = operationTime.timeDifference;
+
+  if (!timeDifferenceString) {
+    return "Нет данных";
+  }
+
+  const [hours, minutes, seconds] = timeDifferenceString.split(':').map(Number);
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+  const totalHours = totalSeconds / 3600;
+  const workingDays = Math.ceil(totalHours / 8);
+
+  return `${timeDifferenceString} (${workingDays} рабочих дней)`;
 }
 
 function getForecastDatesPlan(forecastDatesPlan, operationName) {
@@ -132,6 +159,7 @@ function getForecastDatesStart(forecastDatesStart, operationName) {
 }
 function getCompletionPercentageDisplay(percentage) {
   const percentageValue = Number(percentage); // Преобразуем в число
+
 
   if (isNaN(percentageValue)) {
     return <div>Неизвестно</div>; // Обработка нечисловых значений
@@ -159,19 +187,20 @@ function getCompletionPercentageDisplay(percentage) {
 <div className="table-container">
     <table>
         <thead className="sticky-header">
-            <Headtable />
+        <Headtable /> 
             <tr>
-                <td colspan="24"></td>
+                <td colspan="25"></td>
             </tr>
             <tr>
                 <td rowspan="2">Статус</td>
                 <td rowspan="2">Транзакция</td>
                 <td rowspan="2">План на ППП, час</td>
+                <td rowspan="2">Операция</td>
                 <td rowspan="2">Норматив на операцию, час</td>
                 <td rowspan="2">Норматив на опцию, час</td>
                 <td rowspan="2">Затрачено факт, час</td>
                 <td rowspan="2">Закрытие в срок</td>
-                <td rowspan="2">Устранение отклонений, час</td>
+                <td rowspan="2">Устранение замечаний по потерям, час</td>
                 <td colspan="3">Начало ППП</td>
                 <td rowspan="2">Входной контроль</td>
                 <td rowspan="2">Подключение</td>
@@ -186,12 +215,12 @@ function getCompletionPercentageDisplay(percentage) {
 
             </tr>
             <tr>
-                <td>План</td>
-                <td>Прогноз</td>
-                <td>Факт</td>
-                <td>План</td>
-                <td>Прогноз</td>
-                <td>Факт</td>
+                <td>По БОС</td>
+                <td>Упр.сделками</td>
+                <td>Факт начала</td>
+                <td>По БОС</td>
+                <td>Упр.сделками</td>
+                <td>Факт завершения</td>
                 <td>План</td>
                 <td>Прогноз</td>
                 <td>Факт</td>
@@ -211,15 +240,16 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
         <td className="date-cell">{formatDate2(item.planDateStart)}</td>
         <td className="date-cell">{formatDate2(item.forecastDateStart)}</td>
         <td className="date-cell">{formatDate2(item.factDateStart)}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
+        <td>Межоперационное ожидание (рабочие дни)</td>
         <td></td>
         <td className="date-cell">{formatDate2(item.planDateStop)}</td>
         <td className="date-cell">{formatDate2(item.forecastDateStop)}</td>
@@ -236,6 +266,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td rowspan="7">{item.status}</td>
         <td rowspan="7">{item.transaction}</td>
         <td rowspan="7">{item.planPpp}:00:00</td>
+        <td>План</td>
         <td>{getOperationNormValue(item.operations, "Входной контроль")}:00</td>
         <td>{getOptionNormValue(item.operations, "Входной контроль")}</td>
         <td>{getOperationDuration(item.operations, "Входной контроль")}</td>
@@ -253,13 +284,14 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Подключение")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Подключение")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Входной контроль"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Входной контроль"))}</td>
     </tr>
 
 
 
 
     <tr>
+    <td>Подключение</td>
         <td>{getOperationNormValue(item.operations, "Подключение")}:00</td>
         <td>{getOptionNormValue(item.operations, "Подключение")}</td>
         <td>{getOperationDuration(item.operations, "Подключение")}</td>
@@ -277,13 +309,14 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка механиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка механиком")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Подключение"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Подключение"))}</td>
     </tr>
 
 
 
 
     <tr>
+    <td>Проверка механиком</td>
     <td>{getOperationNormValue(item.operations, "Проверка механиком")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка механиком")}</td>
         <td>{getOperationDuration(item.operations, "Проверка механиком")}</td>
@@ -301,7 +334,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка электронщиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка электронщиком")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка механиком"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка механиком"))}</td>
     </tr>
 
 
@@ -309,6 +342,7 @@ function getCompletionPercentageDisplay(percentage) {
 
 
     <tr>
+    <td>Проверка электронщиком</td>
     <td>{getOperationNormValue(item.operations, "Проверка электронщиком")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка электронщиком")}</td>
         <td>{getOperationDuration(item.operations, "Проверка электронщиком")}</td>
@@ -326,13 +360,14 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка технологом")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка технологом")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка электронщиком"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка электронщиком"))}</td>
     </tr>
 
 
 
 
     <tr>
+    <td>Проверка технологом</td>
     <td>{getOperationNormValue(item.operations, "Проверка технологом")}:00</td>
         <td>{getOptionNormValue(item.operations, "Проверка технологом")}</td>
         <td>{getOperationDuration(item.operations, "Проверка технологом")}</td>
@@ -350,13 +385,14 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Выходной контроль")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Выходной контроль")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Проверка технологом"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка технологом"))}</td>
     </tr>
 
 
 
 
     <tr>
+    <td>Выходной контроль</td>
     <td>{getOperationNormValue(item.operations, "Выходной контроль")}:00</td>
     <td>{getOptionNormValue(item.operations, "Выходной контроль")}</td>
     <td>{getOperationDuration(item.operations, "Выходной контроль")}</td>
@@ -374,13 +410,14 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Транспортное положение")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Транспортное положение")}</td>
-        <td>{formatDate1(getOperationStopTime(item.operations, "Выходной контроль"))}</td>
+        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Выходной контроль"))}</td>
     </tr>
 
 
 
 
     <tr>
+    <td>Транспортное положение</td>
     <td>{getOperationNormValue(item.operations, "Транспортное положение")}:00</td>
     <td>{getOptionNormValue(item.operations, "Транспортное положение")}</td>
     <td>{getOperationDuration(item.operations, "Транспортное положение")}</td>
@@ -398,15 +435,16 @@ function getCompletionPercentageDisplay(percentage) {
     <td>{getOperationEmployeeName(item.operations, "Транспортное положение")}<br/>Операция {getOperationNormDuration(item.operations, "Транспортное положение")}<br/>Опция {getOptionDuration(item.operations, "Транспортное положение")}</td>
     <td>{item.extendedTransportPositionDatePlan}</td>
     <td>{item.extendedTransportPositionDate}</td>
-    <td>{formatDate1(getOperationStopTime(item.operations, "Транспортное положение"))}</td>
+    <td className="red">{formatDate1(getOperationStopTime(item.operations, "Транспортное положение"))}</td>
     </tr>
 
 
     
     <tr>
         <td></td>
-        <td>Отклонение от плана</td>
+        <td>Отклонение от плана (План ППП/Факт ППП)</td>
         {getCompletionPercentageDisplay(item.completionPercentage)}
+        <td></td>
         <td></td>
         <td>Затрачено часов</td>
         <td>{item.totalDurationSum}</td>
@@ -424,7 +462,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td>{item.positiveInterOperationTimeSum}</td>
         <td></td>
         <td>Итоговое время цикла</td>
-        <td>{item.totalSum}</td>
+        <td>{calculateWorkingDaysString(item.totalSum)}</td>
         <td></td>
         <td></td>
         <td></td>

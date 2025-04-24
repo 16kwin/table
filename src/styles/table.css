@@ -53,8 +53,7 @@ td br {
   margin-top: 20px;
   overflow-x: auto; /* Включаем горизонтальную прокрутку */
   overflow-y: auto; /* Включаем вертикальную прокрутку (и скроем её) */
-  max-height: calc(100vh - 150px);
-  padding-bottom: 20px;
+  max-height: calc(100vh - 120px);
 }
 
 /* Скрываем вертикальный скроллбар в WebKit браузерах (Chrome, Safari) */

@@ -1,5 +1,5 @@
 
-import '../../styles/headtable.css';
+import '../../styles/fourtable.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 function Headfourtable() {
@@ -8,7 +8,7 @@ function Headfourtable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://194.87.56.253:8080/employee-statistics'); 
+                const response = await axios.get('http://localhost:8080/employee-statistics'); 
                 setPppData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -23,16 +23,14 @@ function Headfourtable() {
     }
   return (
     <>
- <tr>
+ <tr className="tr">
 
- <th>В работе станков</th> 
- <th>{pppData.machinesInWork}</th> 
- <th></th> 
- <th>Станки в срок</th> 
- <th className="green">{pppData.machinesOnTime}</th> 
- <th>Станки не в срок</th> 
- <th className="red">{pppData.machinesLate}</th> 
- <th></th> 
+ <th className="th">В работе станков</th> 
+ <th className="th">{pppData.machinesInWork}</th> 
+ <th className="th">Станки в срок</th> 
+ <th className="green th">{pppData.machinesOnTime}</th> 
+ <th className="th">Станки не в срок</th> 
+ <th className="red th">{pppData.machinesLate}</th> 
   
  </tr>
     </>

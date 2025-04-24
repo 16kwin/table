@@ -1,7 +1,7 @@
 import Headfourtable from "./headfourtable.js";
 import '../../styles/table.css';
+import '../../styles/fourtable.css';
 import React, { useState, useEffect } from 'react';
-import moment from 'moment-timezone';
 import 'moment/locale/ru';
 
 function Fourtable() {
@@ -14,7 +14,7 @@ function Fourtable() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://194.87.56.253:8080/api/ppp');
+        const response = await fetch('http://localhost:8080/api/ppp');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -43,9 +43,9 @@ function Fourtable() {
   function getTimeExceedsNorm(operations, operationType) {
     const operation = operations.find(op => op.operationType === operationType);
     if (!operation) {
-      return <td></td>; // Если операция не найдена
+      return <td className="td"></td>; // Если операция не найдена
     }
-    return operation.isTimeExceedsNorm ? <td className="green"></td> : <td className="red"></td>; // Преобразование true/false в "Да"/"Нет"
+    return operation.isTimeExceedsNorm ? <td className="green td"></td> : <td className="red td" ></td>; // Преобразование true/false в "Да"/"Нет"
   }
 
   if (loading) {
@@ -58,29 +58,28 @@ function Fourtable() {
 
   return (
     <>
-      {/*  Больше не нужен TableFilters */}
       <div className="table-container">
-        <table>
-          <thead className="sticky-header">
+        <table className="table">
+          <thead className="sticky-header-2">
             <Headfourtable />
           </thead>
           <thead>
-            <tr>
-              <td rowSpan="2">Транзакция</td>
-              <td rowSpan="2">Входной контроль</td>
-              <td rowSpan="2">Подключение</td>
-              <td rowSpan="2">Проверка механиком</td>
-              <td rowSpan="2">Проверка электронщиком</td>
-              <td rowSpan="2">Проверка технологом</td>
-              <td rowSpan="2">Выходной контроль</td>
-              <td rowSpan="2">Транспортное</td>
+            <tr className="tr">
+              <td rowSpan="2" className="td">Транзакция</td>
+              <td rowSpan="2" className="td">Входной контроль</td>
+              <td rowSpan="2" className="td">Подключение</td>
+              <td rowSpan="2" className="td">Проверка механиком</td>
+              <td rowSpan="2" className="td">Проверка электронщиком</td>
+              <td rowSpan="2" className="td">Проверка технологом</td>
+              <td rowSpan="2" className="td">Выходной контроль</td>
+              <td rowSpan="2" className="td">Транспортное</td>
             </tr>
           </thead>
           <tbody>
             {filteredData.map((item) => ( // Отображаем отфильтрованные данные
               <React.Fragment key={item.transaction}>
-                <tr>
-                  <td>{item.transaction}</td>
+                <tr className="tr">
+                  <td className="td">{item.transaction}</td>
                   {getTimeExceedsNorm(item.operations, "Входной контроль")}
                   {getTimeExceedsNorm(item.operations, "Подключение")}
                   {getTimeExceedsNorm(item.operations, "Проверка механиком")}
