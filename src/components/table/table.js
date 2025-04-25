@@ -124,6 +124,37 @@ function calculateWorkingDaysString(totalSum) {
 
   return `${totalSum}, ${workingDays} рабочих дней`;
 }
+
+function getDateComparisonDisplay(forecastDateStop, forecastDateShipment) {
+  // Проверяем, что обе даты существуют
+  if (!forecastDateStop || !forecastDateShipment) {
+    return <td className="date-cell" rowspan="8"></td>; // Обработка отсутствующих значений
+  }
+
+  if (forecastDateShipment < forecastDateStop) {
+    return <td className="red date-cell" rowspan="8" >{forecastDateShipment}</td>; // shipmentDate раньше stopDate
+  } else {
+    return <td className="date-cell" rowspan="8" >{forecastDateShipment}</td>; // shipmentDate не раньше stopDate
+  }
+}
+
+
+function getDateComparisonDisplay2(factDateStop, factDateShipment) {
+  // Проверяем, что обе даты существуют
+  if (!factDateStop || !factDateShipment) {
+    return <td className="date-cell" rowSpan="8"></td>; // Обработка отсутствующих значений
+  }
+
+  // Обрезаем временную часть из factDateStop
+  const stopDateOnly = factDateStop.substring(0, 10); // Получаем YYYY-MM-DD
+
+  if (factDateShipment < stopDateOnly) {
+    return <td className="red date-cell" rowSpan="8">{factDateShipment}</td>; // shipmentDate раньше stopDate
+  } else {
+    return <td className="date-cell" rowSpan="8">{factDateShipment}</td>; // shipmentDate не раньше stopDate
+  }
+}
+
 function getProblemTime(operations, operationType) {
   const operation = operations.find(op => op.operationType === operationType);
   return operation ? operation.problemsNormHours : "";
@@ -146,9 +177,8 @@ function getTimeDifferenceByOperationType(operationTimes, operationType) {
   const totalHours = totalSeconds / 3600;
   const workingDays = Math.ceil(totalHours / 8);
 
-  return `${timeDifferenceString} (${workingDays} рабочих дней)`;
+  return `${timeDifferenceString} \n(${workingDays} рабочих дней)`;
 }
-
 function getForecastDatesPlan(forecastDatesPlan, operationName) {
   const forecastDateDto = forecastDatesPlan && forecastDatesPlan.find(op => op && op.operationName === operationName);
   return forecastDateDto ? forecastDateDto.forecastDate : "";
@@ -185,9 +215,11 @@ function getCompletionPercentageDisplay(percentage) {
 <>
 <TableFilters data={data} onFilter={setFilteredData} /> {/* Используем TableFilters */}
 <div className="table-container">
+  <table>
+<Headtable />
+</table>
     <table>
-        <thead className="sticky-header">
-        <Headtable /> 
+        <thead className="sticky-header"> 
             <tr>
                 <td colspan="25"></td>
             </tr>
@@ -215,12 +247,12 @@ function getCompletionPercentageDisplay(percentage) {
 
             </tr>
             <tr>
-                <td>По БОС</td>
-                <td>Упр.сделками</td>
-                <td>Факт начала</td>
-                <td>По БОС</td>
-                <td>Упр.сделками</td>
-                <td>Факт завершения</td>
+                <td>План <br/>(По БОС)</td>
+                <td>Прогноз <br/>(Упр.сделками)</td>
+                <td>Факт <br/>(Факт начала)</td>
+                <td>План <br/>(По БОС)</td>
+                <td>Прогноз <br/>(Упр.сделками)</td>
+                <td>Факт <br/>(Факт завершения)</td>
                 <td>План</td>
                 <td>Прогноз</td>
                 <td>Факт</td>
@@ -255,8 +287,8 @@ function getCompletionPercentageDisplay(percentage) {
         <td className="date-cell">{formatDate2(item.forecastDateStop)}</td>
         <td className="date-cell">{formatDate2(item.factDateStop)}</td>
         <td rowspan="8" className="date-cell">{formatDate2(item.planDateShipment)}</td>
-        <td rowspan="8" className="date-cell">{formatDate2(item.forecastDateShipment)}</td>
-        <td rowspan="8" className="date-cell">{formatDate2(item.factDateShipment)}</td>
+        {getDateComparisonDisplay(item.forecastDateStop, item.forecastDateShipment)}
+        {getDateComparisonDisplay2(item.factDateStop, item.factDateShipment)}
     </tr>
 
 
@@ -284,7 +316,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Подключение")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Подключение")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Входной контроль"))}</td>
+        <td>{formatDate1(getOperationStopTime(item.operations, "Входной контроль"))}</td>
     </tr>
 
 
@@ -309,7 +341,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка механиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка механиком")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Подключение"))}</td>
+        <td >{formatDate1(getOperationStopTime(item.operations, "Подключение"))}</td>
     </tr>
 
 
@@ -334,7 +366,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка электронщиком")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка электронщиком")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка механиком"))}</td>
+        <td >{formatDate1(getOperationStopTime(item.operations, "Проверка механиком"))}</td>
     </tr>
 
 
@@ -360,7 +392,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Проверка технологом")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Проверка технологом")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка электронщиком"))}</td>
+        <td >{formatDate1(getOperationStopTime(item.operations, "Проверка электронщиком"))}</td>
     </tr>
 
 
@@ -385,7 +417,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Выходной контроль")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Выходной контроль")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Проверка технологом"))}</td>
+        <td >{formatDate1(getOperationStopTime(item.operations, "Проверка технологом"))}</td>
     </tr>
 
 
@@ -410,7 +442,7 @@ function getCompletionPercentageDisplay(percentage) {
         <td></td>
         <td>{getForecastDatesPlan(item.forecastDatesPlan, "Транспортное положение")}</td>
         <td>{getForecastDatesStart(item.forecastDatesStart, "Транспортное положение")}</td>
-        <td className="red">{formatDate1(getOperationStopTime(item.operations, "Выходной контроль"))}</td>
+        <td >{formatDate1(getOperationStopTime(item.operations, "Выходной контроль"))}</td>
     </tr>
 
 
@@ -435,7 +467,7 @@ function getCompletionPercentageDisplay(percentage) {
     <td>{getOperationEmployeeName(item.operations, "Транспортное положение")}<br/>Операция {getOperationNormDuration(item.operations, "Транспортное положение")}<br/>Опция {getOptionDuration(item.operations, "Транспортное положение")}</td>
     <td>{item.extendedTransportPositionDatePlan}</td>
     <td>{item.extendedTransportPositionDate}</td>
-    <td className="red">{formatDate1(getOperationStopTime(item.operations, "Транспортное положение"))}</td>
+    <td >{formatDate1(getOperationStopTime(item.operations, "Транспортное положение"))}</td>
     </tr>
 
 

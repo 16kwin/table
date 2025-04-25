@@ -8,6 +8,7 @@ function Secondtable() {
   const [error, setError] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
+  const [selectedThreshold, setSelectedThreshold] = useState(80);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +52,9 @@ function Secondtable() {
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
   };
+  const handleThresholdChange = (event) => {
+    setSelectedThreshold(parseInt(event.target.value, 10)); // Преобразуем в число
+  };
 
   const months = [
     { value: '', label: 'Все месяцы' },
@@ -76,7 +80,13 @@ function Secondtable() {
     }
     return yearsList;
   };
-
+  const thresholdOptions = () => {
+    const options = [];
+    for (let i = 50; i <= 100; i += 5) {
+      options.push({ value: i, label: `${i}%` });
+    }
+    return options;
+  };
   const formatNormPercentage = (percentage, totalOperations) => {
     const percentageValue = Number(percentage);
 
@@ -96,21 +106,20 @@ function Secondtable() {
   };
 
   const formatPercentage = (percentage, totalOperations) => {
-    const percentageValue = parseFloat(percentage); // Используем parseFloat вместо Number
-  
+    const percentageValue = parseFloat(percentage);
+
     if (isNaN(percentageValue)) {
       return <div className="neutral">Неизвестно</div>;
     }
-  
-    if (percentageValue >= 80) {
-      
+
+    if (percentageValue >= selectedThreshold) { // Используем выбранный порог
       return <td className="green">{percentage}%</td>;
     } else {
       if (totalOperations === 0) {
-        return <td>{percentage}%</td>; // Если totalOperations равно 0, красим серым
+        return <td>{percentage}%</td>;
+      } else {
+        return <td className="red">{percentage}%</td>;
       }
-      else{
-      return <td className="red">{percentage}%</td>;}
     }
   };
 
@@ -145,6 +154,16 @@ function Secondtable() {
             ))}
           </select>
         </div>
+        <div className="filter-group">
+          <label>Выберите порог (%):</label>
+          <select id="thresholdSelect" value={selectedThreshold} onChange={handleThresholdChange}>
+            {thresholdOptions().map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          </div>
       </div>
       <div className="table-container">
       <table>

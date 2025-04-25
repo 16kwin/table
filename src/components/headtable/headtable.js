@@ -28,9 +28,11 @@ function Headtable() {
  <th className="date-cell">Механик <br/>электрон. <br/>технолог <br/>электрик <br/>комплект.</th> 
  <th>{pppData.mechanicCount}<br/>{pppData.electricianCount}<br/>{pppData.technologistCount}<br/>{pppData.electricCount}<br/>{pppData.complectionCount}</th> 
  <th>Занято</th> 
- <th className="date-cell">Механик {pppData.mechanicBusyCount}<br/>электрон.{pppData.electricianBusyCount}<br/>технолог {pppData.technologistBusyCount}<br/>электрик {pppData.electricBusyCount}<br/>комплект. {pppData.complectionBusyCount}</th> 
+ <th className="date-cell">Механик <br/>электрон.<br/>технолог<br/>электрик <br/>комплект. </th>
+ <th className="date-cell">{pppData.mechanicBusyCount}<br/>{pppData.electricianBusyCount}<br/>{pppData.technologistBusyCount}<br/>{pppData.electricBusyCount}<br/>{pppData.complectionBusyCount}</th>  
  <th>Свободно</th> 
- <th className="date-cell">Механик {pppData.mechanicFreeCount}<br/>электрон. {pppData.electricianFreeCount}<br/>технолог {pppData.technologistFreeCount}<br/>электрик {pppData.electricFreeCount}<br/>комплект. {pppData.complectionFreeCount}</th> 
+ <th className="date-cell">Механик <br/>электрон. <br/>технолог <br/>электрик <br/>комплект.</th>
+ <th className="date-cell">{pppData.mechanicFreeCount}<br/>{pppData.electricianFreeCount}<br/>{pppData.technologistFreeCount}<br/>{pppData.electricFreeCount}<br/>{pppData.complectionFreeCount}</th>  
  <th>В работе станков</th> 
  <th>{pppData.machinesInWork}</th> 
  <th>Станки в срок</th> 
