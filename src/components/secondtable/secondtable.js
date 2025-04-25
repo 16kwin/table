@@ -13,7 +13,7 @@ function Secondtable() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      let url = 'http://localhost:8080/employees/performance';
+      let url = 'http://194.87.56.253:8080/employees/performance';
       const params = new URLSearchParams();
 
       if (selectedMonth) {
@@ -193,7 +193,7 @@ function Secondtable() {
               <td>{employee.totalTimeSpent}</td>
               {formatPercentage(employee.normPercentage, employee.totalOperations)}
               <td>{employee.workingHoursFund}</td>
-              <td>{employee.workingHoursFundUsage}</td>
+              <td>{(employee.workingHoursFundUsage * 100).toFixed(2)}%</td>
             </tr>
           ))}
         </tbody>

@@ -15,7 +15,7 @@ function Table() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8080/api/ppp');
+        const response = await fetch('http://194.87.56.253:8080/api/ppp');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

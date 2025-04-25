@@ -8,7 +8,7 @@ function Headfourtable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/employee-statistics'); 
+                const response = await axios.get('http://194.87.56.253:8080/employee-statistics'); 
                 setPppData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
